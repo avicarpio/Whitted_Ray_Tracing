@@ -143,6 +143,8 @@ int Raytracer::Cast( const Ray &ray, const Scene &scene, HitInfo &hitinfo, Objec
 // to handle shadows and reflections.
 Color Raytracer::Shade( const HitInfo &hit, const Scene &scene, int max_tree_depth )
 {
+    //I'm in git now! Yay!
+
     //Para cambiar los rebotes (line 14)
 
     //Unit() Normalizes te vector
