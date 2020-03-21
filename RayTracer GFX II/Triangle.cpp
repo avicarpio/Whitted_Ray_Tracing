@@ -147,10 +147,13 @@ bool Triangle::Intersect( const Ray &ray, HitGeom &hitgeom ) const
 
 	//TODO
 
+	Vec3 R = P + t*(Q - P);
+	Vec3 T = A + v * (B - A) + w * (C - A);
+
 	hitgeom.distance = dist(ray.direction,hitgeom.origin);
-	hitgeom.point = E;
+	hitgeom.point = R;
 	hitgeom.normal = n;
-	hitgeom.origin = QP;
+	hitgeom.origin = P;
 
 	return true;
 }

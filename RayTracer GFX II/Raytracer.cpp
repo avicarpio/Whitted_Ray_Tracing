@@ -143,11 +143,9 @@ int Raytracer::Cast( const Ray &ray, const Scene &scene, HitInfo &hitinfo, Objec
 // to handle shadows and reflections.
 Color Raytracer::Shade( const HitInfo &hit, const Scene &scene, int max_tree_depth )
 {
-    //I'm in git now! Yay!
-
     //Para cambiar los rebotes (line 14)
 
-    //Unit() Normalizes te vector
+    //Unit() Normalizes the vector
     Vec3 N;
     Vec3 L;
     Color pixel;
@@ -183,19 +181,30 @@ Color Raytracer::Shade( const HitInfo &hit, const Scene &scene, int max_tree_dep
     //Reflection 
 
     Vec3 reflect = Reflection(-V,N);
-
+    
     Ray reflect_ray;
     reflect_ray.origin = hit.geom.point + N * Epsilon;
     reflect_ray.direction = reflect;
     reflect_ray.no_emitters = false;
 
+    Color col_refr;
 
+    if (hit.material.m_RefractiveIndex > 0) {
+        Vec3 refract = Refraction(-V, N, hit.material.m_RefractiveIndex);
+
+        Ray refract_ray;
+        refract_ray.origin = hit.geom.point - N * Epsilon;
+        refract_ray.direction = refract;
+        refract_ray.no_emitters = false;
+
+        col_refr = Trace(refract_ray, scene, max_tree_depth);
+    }
+    
     Color col_refl = Trace(reflect_ray, scene, tree_depth);
-
+    
     float K = hit.material.m_Reflectivity;
 
-    pixel = pixel * (1-K) + col_refl * K;
-
+    pixel = pixel * (1-K) + ((hit.material.m_Opacity) * col_refl + (1 - hit.material.m_Opacity) * col_refr) * K;
 
     /*
     Color m_a = hit.material.m_Diffuse;
