@@ -198,7 +198,7 @@ Color Raytracer::Shade( const HitInfo &hit, const Scene &scene, int max_tree_dep
 
     col_refr = Trace(refract_ray, scene, max_tree_depth);
     
-    col_refl = Trace(reflect_ray, scene, tree_depth);
+    col_refl = Trace(reflect_ray, scene, max_tree_depth);
     
     float K = hit.material.m_Reflectivity;
 
